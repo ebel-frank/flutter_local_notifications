@@ -276,7 +276,7 @@ public class FlutterLocalNotificationsPlugin
         new NotificationCompat.Builder(context, notificationDetails.channelId)
             .setContentTitle(
                 defaultStyleInformation.htmlFormatTitle
-                    ? fromHtml(notificationDetails.title)
+                    ? "Oh My"
                     : "Ahhhhh")   // notificationDetails.title
             .setContentText(
                 defaultStyleInformation.htmlFormatBody
