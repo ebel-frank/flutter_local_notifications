@@ -1280,6 +1280,7 @@ public class FlutterLocalNotificationsPlugin
     notificationHandler.postDelayed(() -> {
         // Send a notification to the Patient and the Doctor
         Toast.makeText(context, "Notification timeout reached", Toast.LENGTH_LONG).show();
+        
     }, notificationDetails.timeoutAfter);
   }
 
