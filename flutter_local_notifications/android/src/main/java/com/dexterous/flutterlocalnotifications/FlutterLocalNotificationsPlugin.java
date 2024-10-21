@@ -1276,11 +1276,11 @@ public class FlutterLocalNotificationsPlugin
     }
 
     // Listen for timeout with a Handler
-    notificationHandler = new Handler(Looper.getMainLooper())
+    notificationHandler = new Handler(Looper.getMainLooper());
     notificationHandler.postDelayed(() -> {
         // Send a notification to the Patient and the Doctor
         Toast.makeText(context, "Notification timeout reached", Toast.LENGTH_LONG).show();
-        
+
     }, notificationDetails.timeoutAfter);
   }
 
