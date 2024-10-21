@@ -1282,11 +1282,18 @@ public class FlutterLocalNotificationsPlugin
     notificationHandler = new Handler(Looper.getMainLooper());
     notificationHandler.postDelayed(() -> {
         // Send a notification to the Patient and the Doctor
-        Toast.makeText(context, "Notification timeout", Toast.LENGTH_LONG).show();
+        final Map<String, Object> notificationResponseMap = new HashMap<>();
+        notificationResponseMap.put(NOTIFICATION_ID, 200);
+        notificationResponseMap.put(NOTIFICATION_TAG, "");
+        notificationResponseMap.put(ACTION_ID, "timeout");
+        notificationResponseMap.put(PAYLOAD, "");
+        notificationResponseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+
+        Toast.makeText(context, "Notification timeout reached", Toast.LENGTH_LONG).show();
         if (ActionBroadcastReceiver.actionEventSink == null) {
           ActionBroadcastReceiver.actionEventSink = new ActionBroadcastReceiver.ActionEventSink();
         }
-        ActionBroadcastReceiver.actionEventSink.addItem(notificationDetails);
+        ActionBroadcastReceiver.actionEventSink.addItem(notificationResponseMap);
 
         ActionBroadcastReceiver.startEngine(context);
 
