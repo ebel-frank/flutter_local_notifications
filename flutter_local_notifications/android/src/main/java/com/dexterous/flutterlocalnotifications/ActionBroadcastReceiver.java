@@ -72,7 +72,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     startEngine(context);
   }
 
-  private void startEngine(Context context) {
+  public static void startEngine(Context context) {
     if (engine != null) {
       Log.e(TAG, "Engine is already initialised");
       return;
@@ -103,7 +103,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
         new DartExecutor.DartCallback(context.getAssets(), dartBundlePath, dispatcherHandle));
   }
 
-  private void initializeEventChannel(DartExecutor dartExecutor) {
+  private static void initializeEventChannel(DartExecutor dartExecutor) {
     EventChannel channel =
         new EventChannel(
             dartExecutor.getBinaryMessenger(), "dexterous.com/flutter/local_notifications/actions");
