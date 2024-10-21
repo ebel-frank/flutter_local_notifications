@@ -25,8 +25,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 import android.os.Handler;
-import java.net.HttpURLConnection
-import java.net.URL
+import java.net.HttpURLConnection;
+import java.net.URL;
 import android.os.Looper;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
