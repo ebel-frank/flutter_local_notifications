@@ -277,7 +277,7 @@ public class FlutterLocalNotificationsPlugin
             .setContentTitle(
                 defaultStyleInformation.htmlFormatTitle
                     ? fromHtml(notificationDetails.title)
-                    : notificationDetails.title)
+                    : "Ahhhhh")   // notificationDetails.title
             .setContentText(
                 defaultStyleInformation.htmlFormatBody
                     ? fromHtml(notificationDetails.body)
