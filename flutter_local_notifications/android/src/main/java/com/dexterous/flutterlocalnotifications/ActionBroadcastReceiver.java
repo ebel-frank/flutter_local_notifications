@@ -62,6 +62,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
         NotificationManagerCompat.from(context).cancel(notificationId);
       }
     }
+    FlutterLocalNotificationsPlugin.cancelNotificationHandler();
 
     if (actionEventSink == null) {
       actionEventSink = new ActionEventSink();

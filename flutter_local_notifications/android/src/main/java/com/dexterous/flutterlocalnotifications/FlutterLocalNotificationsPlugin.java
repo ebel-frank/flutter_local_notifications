@@ -276,8 +276,8 @@ public class FlutterLocalNotificationsPlugin
         new NotificationCompat.Builder(context, notificationDetails.channelId)
             .setContentTitle(
                 defaultStyleInformation.htmlFormatTitle
-                    ? "Oh My"
-                    : "Ahhhhh")   // notificationDetails.title
+                    ? fromHtml(notificationDetails.title)
+                    : notificationDetails.title)
             .setContentText(
                 defaultStyleInformation.htmlFormatBody
                     ? fromHtml(notificationDetails.body)
@@ -1262,6 +1262,8 @@ public class FlutterLocalNotificationsPlugin
     return true;
   }
 
+  private static Handler notificationHandler;
+
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
@@ -1272,7 +1274,21 @@ public class FlutterLocalNotificationsPlugin
     } else {
       notificationManagerCompat.notify(notificationDetails.id, notification);
     }
+
+    // Listen for timeout with a Handler
+    notificationHandler = new Handler(Looper.getMainLooper())
+    notificationHandler.postDelayed(() -> {
+        // Send a notification to the Patient and the Doctor
+        Toast.makeText(context, "Notification timeout reached", Toast.LENGTH_LONG).show();
+    }, notificationDetails.timeoutAfter);
   }
+
+  public static void cancelNotificationHandler() {
+        if (notificationHandler != null) {
+            notificationHandler.removeCallbacksAndMessages(null);
+            notificationHandler = null;
+        }
+    }
 
   private static void zonedScheduleNextNotification(
       Context context, NotificationDetails notificationDetails) {
