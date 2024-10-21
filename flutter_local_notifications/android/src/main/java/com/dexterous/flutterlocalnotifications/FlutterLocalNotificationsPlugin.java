@@ -25,7 +25,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 import android.os.Handler;
+import java.net.HttpURLConnection
+import java.net.URL
 import android.os.Looper;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -1282,23 +1287,55 @@ public class FlutterLocalNotificationsPlugin
     notificationHandler = new Handler(Looper.getMainLooper());
     notificationHandler.postDelayed(() -> {
         // Send a notification to the Patient and the Doctor
-        final Map<String, Object> notificationResponseMap = new HashMap<>();
-        notificationResponseMap.put(NOTIFICATION_ID, 200);
-        notificationResponseMap.put(NOTIFICATION_TAG, "");
-        notificationResponseMap.put(ACTION_ID, "timeout");
-        notificationResponseMap.put(PAYLOAD, "");
-        notificationResponseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+        Future<?> future = executorService.submit(() -> {
+            performNetworkRequest(notificationDetails);
+        });
 
-        Toast.makeText(context, "Notification timeout reached", Toast.LENGTH_LONG).show();
-        if (ActionBroadcastReceiver.actionEventSink == null) {
-          ActionBroadcastReceiver.actionEventSink = new ActionBroadcastReceiver.ActionEventSink();
+        // Handle any exceptions from the network request (optional)
+        try {
+            future.get(); // Wait for the task to complete (blocking)
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception
         }
-        ActionBroadcastReceiver.actionEventSink.addItem(notificationResponseMap);
-
-        ActionBroadcastReceiver.startEngine(context);
-
+        Toast.makeText(context, "Notifications Sent to doctor", Toast.LENGTH_LONG).show();
     }, notificationDetails.timeoutAfter);
   }
+
+  private static void performNetworkRequest(NotificationDetails details) {
+        try {
+            // Example of a network POST request
+            URL url = new URL("https://example.com/api/endpoint");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setDoOutput(true);
+
+            // Create the request body
+            String jsonInputString = "{ \"id\": " + details.id + ", \"message\": \"Hello\" }";
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            // Handle the response (optional)
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                System.out.println("Response: " + response.toString());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
   public static void cancelNotificationHandler() {
         if (notificationHandler != null) {
