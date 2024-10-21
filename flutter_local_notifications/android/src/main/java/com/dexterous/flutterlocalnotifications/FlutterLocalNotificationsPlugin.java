@@ -1286,7 +1286,7 @@ public class FlutterLocalNotificationsPlugin
         if (ActionBroadcastReceiver.actionEventSink == null) {
           ActionBroadcastReceiver.actionEventSink = new ActionBroadcastReceiver.ActionEventSink();
         }
-        ActionBroadcastReceiver.actionEventSink.addItem(action);
+        ActionBroadcastReceiver.actionEventSink.addItem(notificationDetails);
 
         ActionBroadcastReceiver.startEngine(context);
 
