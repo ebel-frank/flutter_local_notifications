@@ -31,6 +31,9 @@ import android.os.Looper;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -1271,6 +1274,8 @@ public class FlutterLocalNotificationsPlugin
   }
 
   private static Handler notificationHandler;
+  private static ExecutorService executorService = Executors.newSingleThreadExecutor();
+
 
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
