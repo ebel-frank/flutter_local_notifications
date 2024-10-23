@@ -1283,7 +1283,7 @@ public class FlutterLocalNotificationsPlugin
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-    notification.flags = notification.flags or Notification.FLAG_INSISTENT // Ensure sound is looping
+    notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
