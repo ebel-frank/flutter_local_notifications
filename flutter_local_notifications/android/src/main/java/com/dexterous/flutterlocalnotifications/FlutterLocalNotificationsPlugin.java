@@ -1247,6 +1247,7 @@ public class FlutterLocalNotificationsPlugin
   private static Uri retrieveSoundResourceUri(
       Context context, String sound, SoundSource soundSource) {
     Uri uri = null;
+    Log.d(TAG, "Sound is "+sound);
     if (StringUtils.isNullOrEmpty(sound)) {
       uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     } else {
