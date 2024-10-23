@@ -275,6 +275,7 @@ public class FlutterLocalNotificationsPlugin
     intent.setAction(SELECT_NOTIFICATION);
     intent.putExtra(NOTIFICATION_ID, notificationDetails.id);
     intent.putExtra(PAYLOAD, notificationDetails.payload);
+    notification.flags = notification.flags or Notification.FLAG_INSISTENT
     int flags = PendingIntent.FLAG_UPDATE_CURRENT;
     if (VERSION.SDK_INT >= VERSION_CODES.M) {
       flags |= PendingIntent.FLAG_IMMUTABLE;
@@ -1218,7 +1219,9 @@ public class FlutterLocalNotificationsPlugin
                 ? notificationChannelDetails.audioAttributesUsage
                 : AudioAttributes.USAGE_NOTIFICATION;
         AudioAttributes audioAttributes =
-            new AudioAttributes.Builder().setUsage(audioAttributesUsage).build();
+            new AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setUsage(audioAttributesUsage).build();
         Uri uri =
             retrieveSoundResourceUri(
                 context, notificationChannelDetails.sound, notificationChannelDetails.soundSource);
@@ -1280,6 +1283,7 @@ public class FlutterLocalNotificationsPlugin
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
+    notification.flags = notification.flags or Notification.FLAG_INSISTENT // Ensure sound is looping
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
