@@ -1298,7 +1298,6 @@ public class FlutterLocalNotificationsPlugin
 
         final Map<String, Object> responseMap = new HashMap<>();
         responseMap.put(NOTIFICATION_ID, notificationDetails.id);
-        responseMap.put(NOTIFICATION_TAG, intent.getStringExtra(NOTIFICATION_TAG));
         responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
         responseMap.put(
             FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
