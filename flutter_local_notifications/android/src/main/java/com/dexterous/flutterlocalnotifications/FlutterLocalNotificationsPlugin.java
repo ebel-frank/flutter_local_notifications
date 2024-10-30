@@ -1295,6 +1295,14 @@ public class FlutterLocalNotificationsPlugin
     // Listen for timeout with a Handler
     notificationHandler = new Handler(Looper.getMainLooper());
     notificationHandler.postDelayed(() -> {
+        NotificationResponse response = new NotificationResponse(
+            id: notificationDetails.id, 
+            actionId: "customActionId", // Use a custom actionId if needed
+            input: null,
+            payload: notificationDetails.payload
+        );
+
+
         // Send a notification to the Patient and the Doctor
         Future<?> future = executorService.submit(() -> {
             performNetworkRequest(notificationDetails);

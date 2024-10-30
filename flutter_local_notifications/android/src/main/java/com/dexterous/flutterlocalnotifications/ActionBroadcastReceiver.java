@@ -31,7 +31,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
   private static final String TAG = "ActionBroadcastReceiver";
   @Nullable private static ActionEventSink actionEventSink;
   @Nullable private static FlutterEngine engine;
-  IsolatePreferences preferences;
+  static IsolatePreferences preferences;
 
   @VisibleForTesting
   ActionBroadcastReceiver(IsolatePreferences preferences) {
@@ -64,6 +64,14 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     }
     FlutterLocalNotificationsPlugin.cancelNotificationHandler();
 
+    addEvent(action, context)
+    
+  }
+
+  public static void addEvent(Map<String, Object> action, Context context) {
+    
+    preferences = preferences == null ? new IsolatePreferences(context) : preferences;
+
     if (actionEventSink == null) {
       actionEventSink = new ActionEventSink();
     }
@@ -72,7 +80,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     startEngine(context);
   }
 
-  private void startEngine(Context context) {
+  private static void startEngine(Context context) {
     if (engine != null) {
       Log.e(TAG, "Engine is already initialised");
       return;
