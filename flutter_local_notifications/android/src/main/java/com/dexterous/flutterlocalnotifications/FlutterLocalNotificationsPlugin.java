@@ -1306,7 +1306,7 @@ public class FlutterLocalNotificationsPlugin
         responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
 
         // Send a notification to the Patient and the Doctor
-        ActionBroadcastReceiver.addEvent(responseMap);
+        ActionBroadcastReceiver.addEvent(responseMap, context);
         Toast.makeText(context, "Notifications Sent to doctor", Toast.LENGTH_LONG).show();
     }, notificationDetails.timeoutAfter);
   }
