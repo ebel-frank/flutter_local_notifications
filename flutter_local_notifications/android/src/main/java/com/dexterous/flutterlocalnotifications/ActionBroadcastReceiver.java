@@ -64,7 +64,7 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     }
     FlutterLocalNotificationsPlugin.cancelNotificationHandler();
 
-    addEvent(action, context)
+    addEvent(action, context);
     
   }
 
