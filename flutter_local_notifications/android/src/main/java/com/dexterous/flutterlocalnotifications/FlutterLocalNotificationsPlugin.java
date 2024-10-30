@@ -1247,7 +1247,6 @@ public class FlutterLocalNotificationsPlugin
   private static Uri retrieveSoundResourceUri(
       Context context, String sound, SoundSource soundSource) {
     Uri uri = null;
-    Log.d(TAG, "Sound is "+sound);
     if (StringUtils.isNullOrEmpty(sound)) {
       uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     } else {
@@ -1307,7 +1306,6 @@ public class FlutterLocalNotificationsPlugin
 
         // Send a notification to the Patient and the Doctor
         ActionBroadcastReceiver.addEvent(responseMap, context);
-        Toast.makeText(context, "Notifications Sent to doctor", Toast.LENGTH_LONG).show();
     }, notificationDetails.timeoutAfter);
   }
 
