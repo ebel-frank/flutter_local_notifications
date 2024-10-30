@@ -1312,41 +1312,6 @@ public class FlutterLocalNotificationsPlugin
     }, notificationDetails.timeoutAfter);
   }
 
-        try {
-            // Example of a network POST request
-            URL url = new URL("https://example.com/api/endpoint");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json; utf-8");
-            connection.setDoOutput(true);
-
-            // Create the request body
-            String jsonInputString = "{ \"id\": " + details.id + ", \"message\": \"Hello\" }";
-
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
-
-            // Handle the response (optional)
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println("Response: " + response.toString());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
   public static void cancelNotificationHandler() {
         if (notificationHandler != null) {
             notificationHandler.removeCallbacksAndMessages(null);
