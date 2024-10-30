@@ -1307,17 +1307,17 @@ public class FlutterLocalNotificationsPlugin
         responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
 
         // Send a notification to the Patient and the Doctor
-        ActionBroadcastReceiver.addAction(responseMap);
+        ActionBroadcastReceiver.addEvent(responseMap);
         Toast.makeText(context, "Notifications Sent to doctor", Toast.LENGTH_LONG).show();
     }, notificationDetails.timeoutAfter);
   }
 
   public static void cancelNotificationHandler() {
-        if (notificationHandler != null) {
-            notificationHandler.removeCallbacksAndMessages(null);
-            notificationHandler = null;
-        }
+    if (notificationHandler != null) {
+        notificationHandler.removeCallbacksAndMessages(null);
+        notificationHandler = null;
     }
+  }
 
   private static void zonedScheduleNextNotification(
       Context context, NotificationDetails notificationDetails) {
