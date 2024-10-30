@@ -1295,33 +1295,23 @@ public class FlutterLocalNotificationsPlugin
     // Listen for timeout with a Handler
     notificationHandler = new Handler(Looper.getMainLooper());
     notificationHandler.postDelayed(() -> {
-      
+
         final Map<String, Object> responseMap = new HashMap<>();
         responseMap.put(NOTIFICATION_ID, notificationDetails.id);
         responseMap.put(NOTIFICATION_TAG, intent.getStringExtra(NOTIFICATION_TAG));
         responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
         responseMap.put(
-            FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload));
+            FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
 
         // Foreground response action
         responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
 
         // Send a notification to the Patient and the Doctor
-        Future<?> future = executorService.submit(() -> {
-            performNetworkRequest(notificationDetails);
-        });
-
-        // Handle any exceptions from the network request (optional)
-        try {
-            future.get(); // Wait for the task to complete (blocking)
-        } catch (Exception e) {
-            e.printStackTrace(); // Log the exception
-        }
+        ActionBroadcastReceiver.addAction(responseMap);
         Toast.makeText(context, "Notifications Sent to doctor", Toast.LENGTH_LONG).show();
     }, notificationDetails.timeoutAfter);
   }
 
-  private static void performNetworkRequest(NotificationDetails details) {
         try {
             // Example of a network POST request
             URL url = new URL("https://example.com/api/endpoint");
