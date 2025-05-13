@@ -308,12 +308,6 @@ public class FlutterLocalNotificationsPlugin
             .setSilent(BooleanUtils.getValue(notificationDetails.silent))
             .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
-    // Explicitly turn on screen for Android 8.1+
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-        builder.setTurnScreenOn(true);
-        builder.setLights(0xFFFF0000, 1000, 1000);
-    }
-
     if (notificationDetails.actions != null) {
       // Space out request codes by 16 so even with 16 actions they won't clash
       int requestCode = notificationDetails.id * 16;
@@ -1321,8 +1315,8 @@ public class FlutterLocalNotificationsPlugin
                 PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "Alarm:WakeLock"
             );
-            wakeLock.acquire(10000); // Hold for 6 seconds
-            Log.d(TAG, "Acquired partial wake lock for 6 seconds");
+            wakeLock.acquire(8000); // Hold for 10 seconds
+            Log.d(TAG, "Acquired partial wake lock for 8 seconds");
         } else if (powerManager == null) {
             Log.e(TAG, "PowerManager is null");
         } else {
