@@ -1312,6 +1312,8 @@ public class FlutterLocalNotificationsPlugin
         "Alarm:WakeLock"
     );
     wakeLock.acquire(5000);
+    Log.d(TAG, "Waking up device for 5 seconds");
+    
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
