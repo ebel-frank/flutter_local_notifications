@@ -15,6 +15,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import android.app.KeyguardManager;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
@@ -1305,14 +1306,32 @@ public class FlutterLocalNotificationsPlugin
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
-    // Wake up device for 5 seconds
-    PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-        PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
-        "Alarm:WakeLock"
-    );
-    wakeLock.acquire(5000);
-    Log.d(TAG, "Waking up device for 5 seconds");
+    // Wake up device and unlock screen
+        try {
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            if (powerManager != null) {
+                // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
+                PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                    "Alarm:WakeLock"
+                );
+                wakeLock.acquire(10000); // Hold for 10 seconds to ensure screen wake
+                Log.d(TAG, "Acquired partial wake lock for 6 seconds");
+
+                // Turn on screen explicitly for Android 9+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+                    if (keyguardManager != null && keyguardManager.isKeyguardLocked()) {
+                        keyguardManager.requestDismissKeyguard(null, null);
+                        Log.d(TAG, "Requested keyguard dismissal");
+                    }
+                }
+            } else {
+                Log.e(TAG, "PowerManager is null");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error waking screen: " + e.getMessage());
+        }
     
 
     if (notificationDetails.tag != null) {
