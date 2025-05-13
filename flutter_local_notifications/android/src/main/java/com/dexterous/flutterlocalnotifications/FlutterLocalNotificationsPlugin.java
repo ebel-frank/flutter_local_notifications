@@ -14,6 +14,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
@@ -1283,6 +1284,14 @@ public class FlutterLocalNotificationsPlugin
     Notification notification = createNotification(context, notificationDetails);
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
+
+    // Wake up device for 5 seconds
+    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+    val wakeLock = powerManager.newWakeLock(
+        PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE,
+        "Alarm:WakeLock"
+    )
+    wakeLock.acquire(5000)
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
