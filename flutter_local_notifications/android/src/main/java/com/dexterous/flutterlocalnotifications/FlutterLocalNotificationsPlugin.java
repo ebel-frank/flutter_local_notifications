@@ -308,6 +308,12 @@ public class FlutterLocalNotificationsPlugin
             .setSilent(BooleanUtils.getValue(notificationDetails.silent))
             .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
+    // Explicitly turn on screen for Android 8.1+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        builder.setTurnScreenOn(true);
+        builder.setLights(0xFFFF0000, 1000, 1000);
+    }
+
     if (notificationDetails.actions != null) {
       // Space out request codes by 16 so even with 16 actions they won't clash
       int requestCode = notificationDetails.id * 16;
