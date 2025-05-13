@@ -130,6 +130,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -252,6 +253,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -336,6 +338,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -421,6 +424,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -507,6 +511,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -595,6 +600,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -684,6 +690,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -773,6 +780,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -861,6 +869,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -951,6 +960,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1056,6 +1066,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1155,6 +1166,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1260,6 +1272,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1357,6 +1370,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1458,6 +1472,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1550,6 +1565,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1639,6 +1655,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1735,6 +1752,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1860,6 +1878,7 @@ void main() {
               'channelName': 'channelName',
               'channelDescription': 'channelDescription',
               'channelShowBadge': true,
+              'channelBypassDnd': false,
               'channelAction':
                   AndroidNotificationChannelAction.createIfNotExists.index,
               'importance': Importance.defaultImportance.value,
@@ -1974,6 +1993,7 @@ void main() {
                     'channelName': 'channelName',
                     'channelDescription': 'channelDescription',
                     'channelShowBadge': true,
+                    'channelBypassDnd': false,
                     'channelAction': AndroidNotificationChannelAction
                         .createIfNotExists.index,
                     'importance': Importance.defaultImportance.value,
@@ -2108,6 +2128,7 @@ void main() {
                         'channelName': 'channelName',
                         'channelDescription': 'channelDescription',
                         'channelShowBadge': true,
+                        'channelBypassDnd': false,
                         'channelAction': AndroidNotificationChannelAction
                             .createIfNotExists.index,
                         'importance': Importance.defaultImportance.value,
@@ -2186,9 +2207,7 @@ void main() {
             'notification body',
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle);
         expect(
             log.last,
             isMethodCall('zonedSchedule', arguments: <String, Object>{
@@ -2206,6 +2225,7 @@ void main() {
                 'channelName': 'channelName',
                 'channelDescription': 'channelDescription',
                 'channelShowBadge': true,
+                'channelBypassDnd': false,
                 'channelAction':
                     AndroidNotificationChannelAction.createIfNotExists.index,
                 'importance': Importance.defaultImportance.value,
@@ -2282,8 +2302,6 @@ void main() {
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.time);
         expect(
             log.last,
@@ -2303,6 +2321,7 @@ void main() {
                 'channelName': 'channelName',
                 'channelDescription': 'channelDescription',
                 'channelShowBadge': true,
+                'channelBypassDnd': false,
                 'channelAction':
                     AndroidNotificationChannelAction.createIfNotExists.index,
                 'importance': Importance.defaultImportance.value,
@@ -2379,8 +2398,6 @@ void main() {
             scheduledDate,
             const NotificationDetails(android: androidNotificationDetails),
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
         expect(
             log.last,
@@ -2401,6 +2418,7 @@ void main() {
                 'channelName': 'channelName',
                 'channelDescription': 'channelDescription',
                 'channelShowBadge': true,
+                'channelBypassDnd': false,
                 'channelAction':
                     AndroidNotificationChannelAction.createIfNotExists.index,
                 'importance': Importance.defaultImportance.value,
@@ -2507,6 +2525,7 @@ void main() {
           'groupId': null,
           'showBadge': true,
           'importance': Importance.defaultImportance.value,
+          'bypassDnd': false,
           'playSound': true,
           'enableVibration': true,
           'vibrationPattern': null,
@@ -2532,6 +2551,7 @@ void main() {
             description: 'channelDescription',
             groupId: 'channelGroupId',
             showBadge: false,
+            bypassDnd: true,
             importance: Importance.max,
             playSound: false,
             enableLights: true,
@@ -2547,6 +2567,7 @@ void main() {
           'groupId': 'channelGroupId',
           'showBadge': false,
           'importance': Importance.max.value,
+          'bypassDnd': true,
           'playSound': false,
           'enableVibration': false,
           'vibrationPattern': null,
@@ -2701,6 +2722,7 @@ void main() {
                   'channelName': 'channelName',
                   'channelDescription': 'channelDescription',
                   'channelShowBadge': true,
+                  'channelBypassDnd': false,
                   'channelAction':
                       AndroidNotificationChannelAction.createIfNotExists.index,
                   'importance': Importance.defaultImportance.value,

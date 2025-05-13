@@ -237,6 +237,7 @@ void main() {
                 identifier: '2b3f705f-a680-4c9f-8075-a46a70e28373'),
           ],
           categoryIdentifier: 'category1',
+          criticalSoundVolume: 0.5,
         ),
       );
 
@@ -270,6 +271,7 @@ void main() {
               ],
               'categoryIdentifier': 'category1',
               'interruptionLevel': null,
+              'criticalSoundVolume': 0.5,
             },
           }));
     });
@@ -343,6 +345,7 @@ void main() {
                     ],
                     'categoryIdentifier': null,
                     'interruptionLevel': null,
+                    'criticalSoundVolume': null,
                   },
                 },
               ),
@@ -470,6 +473,7 @@ void main() {
                     ],
                     'categoryIdentifier': null,
                     'interruptionLevel': null,
+                    'criticalSoundVolume': null,
                   },
                 },
               ),
@@ -511,9 +515,7 @@ void main() {
             'notification body',
             scheduledDate,
             notificationDetails,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle);
 
         expect(
             log.last,
@@ -522,8 +524,6 @@ void main() {
               'title': 'notification title',
               'body': 'notification body',
               'payload': '',
-              'uiLocalNotificationDateInterpretation':
-                  UILocalNotificationDateInterpretation.absoluteTime.index,
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
               'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'timeZoneName': 'Australia/Sydney',
@@ -547,6 +547,7 @@ void main() {
                 ],
                 'categoryIdentifier': null,
                 'interruptionLevel': null,
+                'criticalSoundVolume': null,
               },
             }));
       });
@@ -583,8 +584,6 @@ void main() {
             scheduledDate,
             notificationDetails,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.time);
 
         expect(
@@ -594,8 +593,6 @@ void main() {
               'title': 'notification title',
               'body': 'notification body',
               'payload': '',
-              'uiLocalNotificationDateInterpretation':
-                  UILocalNotificationDateInterpretation.absoluteTime.index,
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
               'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'timeZoneName': 'Australia/Sydney',
@@ -620,6 +617,7 @@ void main() {
                 ],
                 'categoryIdentifier': null,
                 'interruptionLevel': null,
+                'criticalSoundVolume': null,
               },
             }));
       });
@@ -656,8 +654,6 @@ void main() {
             scheduledDate,
             notificationDetails,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
             matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
         expect(
@@ -667,8 +663,6 @@ void main() {
               'title': 'notification title',
               'body': 'notification body',
               'payload': '',
-              'uiLocalNotificationDateInterpretation':
-                  UILocalNotificationDateInterpretation.absoluteTime.index,
               'scheduledDateTime': convertDateToISO8601String(scheduledDate),
               'scheduledDateTimeISO8601': scheduledDate.toIso8601String(),
               'timeZoneName': 'Australia/Sydney',
@@ -694,6 +688,7 @@ void main() {
                 ],
                 'categoryIdentifier': null,
                 'interruptionLevel': null,
+                'criticalSoundVolume': null,
               },
             }));
       });
