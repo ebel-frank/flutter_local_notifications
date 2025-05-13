@@ -1306,33 +1306,25 @@ public class FlutterLocalNotificationsPlugin
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
-    // Wake up device and unlock screen
-        try {
-            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            if (powerManager != null) {
-                // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
-                PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-                    PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                    "Alarm:WakeLock"
-                );
-                wakeLock.acquire(10000); // Hold for 10 seconds to ensure screen wake
-                Log.d(TAG, "Acquired partial wake lock for 6 seconds");
-
-                // Turn on screen explicitly for Android 9+
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                    KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-                    if (keyguardManager != null && keyguardManager.isKeyguardLocked()) {
-                        keyguardManager.requestDismissKeyguard(null, null);
-                        Log.d(TAG, "Requested keyguard dismissal");
-                    }
-                }
-            } else {
-                Log.e(TAG, "PowerManager is null");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error waking screen: " + e.getMessage());
+    // Wake up device
+    try {
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isInteractive()) {
+            // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                "Alarm:WakeLock"
+            );
+            wakeLock.acquire(10000); // Hold for 6 seconds
+            Log.d(TAG, "Acquired partial wake lock for 6 seconds");
+        } else if (powerManager == null) {
+            Log.e(TAG, "PowerManager is null");
+        } else {
+            Log.d(TAG, "Screen is already interactive");
         }
-    
+    } catch (Exception e) {
+        Log.e(TAG, "Error acquiring wake lock: " + e.getMessage());
+    }
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
