@@ -1286,12 +1286,12 @@ public class FlutterLocalNotificationsPlugin
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
     // Wake up device for 5 seconds
-    val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-    val wakeLock = powerManager.newWakeLock(
-        PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE,
+    PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+        PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
         "Alarm:WakeLock"
-    )
-    wakeLock.acquire(5000)
+    );
+    wakeLock.acquire(duration);
 
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
