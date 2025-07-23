@@ -1932,7 +1932,7 @@ public class FlutterLocalNotificationsPlugin
         && !isValidDrawableResource(applicationContext, icon, result, INVALID_ICON_ERROR_CODE);
   }
 
-  private void cancelNotification(Integer id, String tag) {
+  private static void cancelNotification(Integer id, String tag) {
     Intent intent = new Intent(applicationContext, ScheduledNotificationReceiver.class);
     PendingIntent pendingIntent = getBroadcastPendingIntent(applicationContext, id, intent);
     AlarmManager alarmManager = getAlarmManager(applicationContext);
