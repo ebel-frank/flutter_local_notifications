@@ -1455,9 +1455,10 @@ public class FlutterLocalNotificationsPlugin
         null;
     
     // Use all days if daysOfTheWeek is empty (0=Sunday to 6=Saturday)
-    List<Integer> activeDays = notificationDetails.daysOfTheWeek.isEmpty() ?
+    List<Integer> activeDays = notificationDetails.daysOfTheWeek == null || 
+        notificationDetails.daysOfTheWeek.length == 0 ?
         Arrays.asList(0, 1, 2, 3, 4, 5, 6) :
-        notificationDetails.daysOfTheWeek;
+        Arrays.asList(notificationDetails.daysOfTheWeek);
     
     // Check each day from today onward (including today)
     for (int dayOffset = 0; dayOffset <= 7; dayOffset++) {
