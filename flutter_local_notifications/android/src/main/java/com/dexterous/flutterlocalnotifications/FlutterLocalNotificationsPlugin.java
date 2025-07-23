@@ -1377,7 +1377,7 @@ public class FlutterLocalNotificationsPlugin
   private static void zonedScheduleNextNotificationMatchingDateComponents(
       Context context, NotificationDetails notificationDetails) {
     String nextFireDate = getNextFireDateMatchingDateTimeComponents(notificationDetails);
-    Log.d(TAG, notificationDetails.toString());
+    Log.d(TAG, notificationDetails.timeZoneName + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
     Log.d(TAG, "Schedule Date Time: " + nextFireDate + " " + getNextFireDateMatchingTime(notificationDetails));
     if (nextFireDate == null) {
       return;
