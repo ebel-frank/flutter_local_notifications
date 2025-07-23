@@ -95,6 +95,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -1444,21 +1445,19 @@ public class FlutterLocalNotificationsPlugin
   private static String getNextFireDateMatchingTime(NotificationDetails notificationDetails) {
     // Set up timezone
     ZoneId zoneId = ZoneId.of(notificationDetails.timeZoneName);
+    ZonedDateTime startDate =
+        ZonedDateTime.of(LocalDateTime.parse(notificationDetails.scheduledDateTime), zoneId);
     ZonedDateTime now = ZonedDateTime.now(zoneId);
     
-    // Parse start date (scheduledDateTime)
-    ZonedDateTime startDate = ZonedDateTime.of(
-        LocalDateTime.parse(notificationDetails.scheduledDateTime), zoneId);
-    
     // Parse optional end date
-    ZonedDateTime endDate = notificationDetails.scheduleEndDateTime != null ?
-        ZonedDateTime.of(LocalDateTime.parse(notificationDetails.scheduleEndDateTime), zoneId) :
+    ZonedDateTime endDate = notificationDetails.scheduledEndDateTime != null ?
+        ZonedDateTime.of(LocalDateTime.parse(notificationDetails.scheduledEndDateTime), zoneId) :
         null;
     
-    // Use all days if frequency is empty (0=Sunday to 6=Saturday)
-    List<Integer> activeDays = notificationDetails.frequency.isEmpty() ?
+    // Use all days if daysOfTheWeek is empty (0=Sunday to 6=Saturday)
+    List<Integer> activeDays = notificationDetails.daysOfTheWeek.isEmpty() ?
         Arrays.asList(0, 1, 2, 3, 4, 5, 6) :
-        notificationDetails.frequency;
+        notificationDetails.daysOfTheWeek;
     
     // Check each day from today onward (including today)
     for (int dayOffset = 0; dayOffset <= 7; dayOffset++) {
