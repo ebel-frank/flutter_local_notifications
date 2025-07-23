@@ -1382,6 +1382,7 @@ public class FlutterLocalNotificationsPlugin
     if (nextFireDate == null) {
       // Cancel the notification if there is no nextFireDate
       // cancelNotification(context, notificationDetails.id, null);
+      removeNotificationFromCache(context, notificationDetails.id);
       return;
     }
     notificationDetails.scheduledDateTime = nextFireDate;
