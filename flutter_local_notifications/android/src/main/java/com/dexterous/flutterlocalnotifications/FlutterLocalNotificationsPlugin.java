@@ -1381,7 +1381,7 @@ public class FlutterLocalNotificationsPlugin
     Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
     if (nextFireDate == null) {
       // Cancel the notification if there is no nextFireDate
-      cancelNotification(notificationDetails.id, null);
+      cancelNotification(context, notificationDetails.id, null);
       return;
     }
     notificationDetails.scheduledDateTime = nextFireDate;
@@ -1751,7 +1751,7 @@ public class FlutterLocalNotificationsPlugin
     Map<String, Object> arguments = call.arguments();
     Integer id = (Integer) arguments.get(CANCEL_ID);
     String tag = (String) arguments.get(CANCEL_TAG);
-    cancelNotification(id, tag);
+    cancelNotification(applicationContext, id, tag);
     result.success(null);
   }
 
@@ -1932,18 +1932,18 @@ public class FlutterLocalNotificationsPlugin
         && !isValidDrawableResource(applicationContext, icon, result, INVALID_ICON_ERROR_CODE);
   }
 
-  private static void cancelNotification(Integer id, String tag) {
-    Intent intent = new Intent(applicationContext, ScheduledNotificationReceiver.class);
-    PendingIntent pendingIntent = getBroadcastPendingIntent(applicationContext, id, intent);
-    AlarmManager alarmManager = getAlarmManager(applicationContext);
+  private static void cancelNotification(Context context, Integer id, String tag) {
+    Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+    PendingIntent pendingIntent = getBroadcastPendingIntent(context, id, intent);
+    AlarmManager alarmManager = getAlarmManager(context);
     alarmManager.cancel(pendingIntent);
-    NotificationManagerCompat notificationManager = getNotificationManager(applicationContext);
+    NotificationManagerCompat notificationManager = getNotificationManager(context);
     if (tag == null) {
       notificationManager.cancel(id);
     } else {
       notificationManager.cancel(tag, id);
     }
-    removeNotificationFromCache(applicationContext, id);
+    removeNotificationFromCache(context, id);
   }
 
   private void cancelAllNotifications(Result result) {
