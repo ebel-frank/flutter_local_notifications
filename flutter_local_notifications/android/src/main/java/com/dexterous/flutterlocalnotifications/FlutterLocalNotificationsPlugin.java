@@ -1380,6 +1380,8 @@ public class FlutterLocalNotificationsPlugin
     String nextFireDate = getNextFireDateMatchingTime(notificationDetails);
     Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
     if (nextFireDate == null) {
+      // Cancel the notification if there is no nextFireDate
+      cancelNotification(notificationDetails.id, null);
       return;
     }
     notificationDetails.scheduledDateTime = nextFireDate;
