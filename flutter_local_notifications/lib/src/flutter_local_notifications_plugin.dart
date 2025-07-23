@@ -338,6 +338,9 @@ class FlutterLocalNotificationsPlugin {
     TZDateTime scheduledDate,
     NotificationDetails notificationDetails, {
     required AndroidScheduleMode androidScheduleMode,
+    TZDateTime? scheduledEndDate,
+    List<int> daysOfTheWeek,
+    List<String> notificationTimes,
     String? payload,
     DateTimeComponents? matchDateTimeComponents,
   }) async {
@@ -349,6 +352,9 @@ class FlutterLocalNotificationsPlugin {
               AndroidFlutterLocalNotificationsPlugin>()!
           .zonedSchedule(
               id, title, body, scheduledDate, notificationDetails.android,
+              scheduledEndDate: scheduledEndDate,
+              daysOfTheWeek: daysOfTheWeek,
+              notificationTimes: notificationTimes,
               payload: payload,
               scheduleMode: androidScheduleMode,
               matchDateTimeComponents: matchDateTimeComponents);
