@@ -180,7 +180,7 @@ public class NotificationDetails implements Serializable {
   public String ticker;
   public Integer visibility;
   public List<Integer> daysOfTheWeek;
-  public String[] notificationTimes;
+  public List<String> notificationTimes;
 
   @SerializedName(value = "scheduleMode", alternate = "allowWhileIdle")
   public ScheduleMode scheduleMode;
