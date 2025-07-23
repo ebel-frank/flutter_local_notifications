@@ -248,7 +248,6 @@ class AndroidFlutterLocalNotificationsPlugin
         'id': id,
         'title': title,
         'body': body,
-        '': notificationTimes
         'platformSpecifics':
             _buildPlatformSpecifics(notificationDetails, scheduleMode),
         'payload': payload ?? '',
