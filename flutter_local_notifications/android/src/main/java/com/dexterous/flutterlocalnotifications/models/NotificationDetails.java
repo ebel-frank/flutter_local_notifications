@@ -115,6 +115,10 @@ public class NotificationDetails implements Serializable {
   private static final String CHRONOMETER_COUNT_DOWN = "chronometerCountDown";
   private static final String ADDITIONAL_FLAGS = "additionalFlags";
 
+
+  private static final String DAYS_OF_THE_WEEK = "daysOfTheWeek";
+  private static final String NOTIFICATION_TIMES = "notificationTimes";
+  private static final String SCHEDULED_END_DATE_TIME = "scheduledEndDateTime";
   private static final String SCHEDULED_DATE_TIME = "scheduledDateTime";
   private static final String TIME_ZONE_NAME = "timeZoneName";
   private static final String SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY =
@@ -175,6 +179,8 @@ public class NotificationDetails implements Serializable {
   public Integer ledOffMs;
   public String ticker;
   public Integer visibility;
+  public int[] daysOfTheWeek;
+  public String[] notificationTimes;
 
   @SerializedName(value = "scheduleMode", alternate = "allowWhileIdle")
   public ScheduleMode scheduleMode;
@@ -186,6 +192,7 @@ public class NotificationDetails implements Serializable {
   public Boolean usesChronometer;
   public Boolean chronometerCountDown;
   public String scheduledDateTime;
+  public String scheduledEndDateTime;
   public String timeZoneName;
   public ScheduledNotificationRepeatFrequency scheduledNotificationRepeatFrequency;
   public DateTimeComponents matchDateTimeComponents;
@@ -210,6 +217,9 @@ public class NotificationDetails implements Serializable {
     notificationDetails.title = (String) arguments.get(TITLE);
     notificationDetails.body = (String) arguments.get(BODY);
     notificationDetails.scheduledDateTime = (String) arguments.get(SCHEDULED_DATE_TIME);
+    notificationDetails.scheduledEndDateTime = (String) arguments.get(SCHEDULED_END_DATE_TIME);
+    notificationDetails.daysOfTheWeek =  (int[]) arguments.get(DAYS_OF_THE_WEEK);
+    notificationDetails.notificationTimes =  (String[]) arguments.get(NOTIFICATION_TIMES);
     notificationDetails.timeZoneName = (String) arguments.get(TIME_ZONE_NAME);
     if (arguments.containsKey(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)) {
       notificationDetails.scheduledNotificationRepeatFrequency =

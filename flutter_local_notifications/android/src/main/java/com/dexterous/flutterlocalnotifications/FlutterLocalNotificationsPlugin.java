@@ -1441,6 +1441,57 @@ public class FlutterLocalNotificationsPlugin
     return null;
   }
 
+  private static String getNextFireDateMatchingTime(NotificationDetails notificationDetails) {
+    // Set up timezone
+    ZoneId zoneId = ZoneId.of(notificationDetails.timeZoneName);
+    ZonedDateTime now = ZonedDateTime.now(zoneId);
+    
+    // Parse start date (scheduledDateTime)
+    ZonedDateTime startDate = ZonedDateTime.of(
+        LocalDateTime.parse(notificationDetails.scheduledDateTime), zoneId);
+    
+    // Parse optional end date
+    ZonedDateTime endDate = notificationDetails.scheduleEndDateTime != null ?
+        ZonedDateTime.of(LocalDateTime.parse(notificationDetails.scheduleEndDateTime), zoneId) :
+        null;
+    
+    // Use all days if frequency is empty (0=Sunday to 6=Saturday)
+    List<Integer> activeDays = notificationDetails.frequency.isEmpty() ?
+        Arrays.asList(0, 1, 2, 3, 4, 5, 6) :
+        notificationDetails.frequency;
+    
+    // Check each day from today onward (including today)
+    for (int dayOffset = 0; dayOffset <= 7; dayOffset++) {
+        ZonedDateTime nextDay = now.plusDays(dayOffset);
+        
+        // Convert Java's DayOfWeek (1=Monday to 7=Sunday) to our 0-6 format (0=Sunday)
+        int nextDayOfWeek = (nextDay.getDayOfWeek().getValue() % 7);
+        
+        if (activeDays.contains(nextDayOfWeek) &&
+            (endDate == null || isSameOrBefore(nextDay, endDate))) {
+            
+            for (String time : notificationDetails.notificationTimes) {
+                LocalTime notificationTime = LocalTime.parse(time);
+                ZonedDateTime scheduleTime = ZonedDateTime.of(
+                    nextDay.toLocalDate(),
+                    notificationTime,
+                    zoneId);
+                
+                // Find the first valid reminder time in the future
+                if (now.isBefore(scheduleTime)) {
+                    return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(scheduleTime);
+                }
+            }
+        }
+    }
+    // No valid time was found
+    return null;
+  }
+
+  private static boolean isSameOrBefore(ZonedDateTime date1, ZonedDateTime date2) {
+    return date1.isBefore(date2) || date1.isEqual(date2);
+  }
+
   private static NotificationManagerCompat getNotificationManager(Context context) {
     return NotificationManagerCompat.from(context);
   }
@@ -1714,10 +1765,11 @@ public class FlutterLocalNotificationsPlugin
       if (notificationDetails.matchDateTimeComponents != null) {
         notificationDetails.scheduledDateTime =
             getNextFireDateMatchingDateTimeComponents(notificationDetails);
-            Log.d(TAG, "Schedule Date Time: " + notificationDetails.scheduledDateTime.toString());
+            Log.d(TAG, "Schedule Date Time1: " + getNextFireDateMatchingTime(notificationDetails).toString());
+            Log.d(TAG, "Schedule Date Time2: " + notificationDetails.scheduledDateTime.toString());
       }
       try {
-        zonedScheduleNotification(applicationContext, notificationDetails, true);
+        // zonedScheduleNotification(applicationContext, notificationDetails, true);
         result.success(null);
       } catch (PluginException e) {
         result.error(e.code, e.getMessage(), null);
