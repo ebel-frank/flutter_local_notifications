@@ -234,8 +234,8 @@ class AndroidFlutterLocalNotificationsPlugin
     AndroidNotificationDetails? notificationDetails, {
     required AndroidScheduleMode scheduleMode,
     TZDateTime? scheduledEndDate,
-    List<int> daysOfTheWeek,
-    List<String> notificationTimes,
+    required List<int> daysOfTheWeek,
+    required List<String> notificationTimes,
     String? payload,
     DateTimeComponents? matchDateTimeComponents,
   }) async {
@@ -252,7 +252,7 @@ class AndroidFlutterLocalNotificationsPlugin
             _buildPlatformSpecifics(notificationDetails, scheduleMode),
         'payload': payload ?? '',
         if (scheduledEndDate != null)
-          'scheduledEndDateTime': scheduledEndDate.toMap()['scheduledDateTime']
+          'scheduledEndDateTime': scheduledEndDate.toMap()['scheduledDateTime'],
         ...scheduledDate.toMap(),
         'daysOfTheWeek': daysOfTheWeek,
         'notificationTimes': notificationTimes,
