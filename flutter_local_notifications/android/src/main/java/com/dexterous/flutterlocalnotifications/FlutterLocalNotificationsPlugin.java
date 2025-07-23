@@ -1459,6 +1459,8 @@ public class FlutterLocalNotificationsPlugin
       notificationDetails.daysOfTheWeek.isEmpty() ?
         Arrays.asList(0, 1, 2, 3, 4, 5, 6) :
         notificationDetails.daysOfTheWeek;
+
+    final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a").withLocale(Locale.US);
     
     // Check each day from today onward (including today)
     for (int dayOffset = 0; dayOffset <= 7; dayOffset++) {
@@ -1471,7 +1473,7 @@ public class FlutterLocalNotificationsPlugin
             (endDate == null || isSameOrBefore(nextDay, endDate))) {
             
             for (String time : notificationDetails.notificationTimes) {
-                LocalTime notificationTime = LocalTime.parse(time);
+                LocalTime notificationTime = LocalTime.parse(time, timeFormatter);
                 ZonedDateTime scheduleTime = ZonedDateTime.of(
                     nextDay.toLocalDate(),
                     notificationTime,
