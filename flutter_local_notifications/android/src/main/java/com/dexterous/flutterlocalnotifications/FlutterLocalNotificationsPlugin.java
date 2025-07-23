@@ -1333,22 +1333,24 @@ public class FlutterLocalNotificationsPlugin
       notificationManagerCompat.notify(notificationDetails.id, notification);
     }
 
-    // Listen for timeout with a Handler
-    notificationHandler = new Handler(Looper.getMainLooper());
-    notificationHandler.postDelayed(() -> {
+    if (notificationDetails.timeoutAfter != null) {
+      // Listen for timeout with a Handler
+      notificationHandler = new Handler(Looper.getMainLooper());
+      notificationHandler.postDelayed(() -> {
 
-        final Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put(NOTIFICATION_ID, notificationDetails.id);
-        responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
-        responseMap.put(
-            FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
+          final Map<String, Object> responseMap = new HashMap<>();
+          responseMap.put(NOTIFICATION_ID, notificationDetails.id);
+          responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
+          responseMap.put(
+              FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
 
-        // Foreground response action
-        responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+          // Foreground response action
+          responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
 
-        // Send a notification to the Patient and the Doctor
-        ActionBroadcastReceiver.addEvent(responseMap, context);
-    }, notificationDetails.timeoutAfter);
+          // Send a notification to the Patient and the Doctor
+          ActionBroadcastReceiver.addEvent(responseMap, context);
+      }, notificationDetails.timeoutAfter);
+    }
   }
 
   public static void cancelNotificationHandler() {
