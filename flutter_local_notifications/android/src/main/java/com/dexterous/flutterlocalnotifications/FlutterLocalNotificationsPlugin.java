@@ -1377,9 +1377,8 @@ public class FlutterLocalNotificationsPlugin
 
   private static void zonedScheduleNextNotificationMatchingDateComponents(
       Context context, NotificationDetails notificationDetails) {
-    String nextFireDate = getNextFireDateMatchingDateTimeComponents(notificationDetails);
-    Log.d(TAG, notificationDetails.timeZoneName + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
-    Log.d(TAG, "Schedule Date Time: " + nextFireDate + " " + getNextFireDateMatchingTime(notificationDetails));
+    String nextFireDate = getNextFireDateMatchingTime(notificationDetails);
+    Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
     if (nextFireDate == null) {
       return;
     }
@@ -1402,49 +1401,7 @@ public class FlutterLocalNotificationsPlugin
     return null;
   }
 
-  private static String getNextFireDateMatchingDateTimeComponents(
-      NotificationDetails notificationDetails) {
-    ZoneId zoneId = ZoneId.of(notificationDetails.timeZoneName);
-    ZonedDateTime scheduledDateTime =
-        ZonedDateTime.of(LocalDateTime.parse(notificationDetails.scheduledDateTime), zoneId);
-    ZonedDateTime now = ZonedDateTime.now(zoneId);
-    ZonedDateTime nextFireDate =
-        ZonedDateTime.of(
-            now.getYear(),
-            now.getMonthValue(),
-            now.getDayOfMonth(),
-            scheduledDateTime.getHour(),
-            scheduledDateTime.getMinute(),
-            scheduledDateTime.getSecond(),
-            scheduledDateTime.getNano(),
-            zoneId);
-    while (nextFireDate.isBefore(now)) {
-      // adjust to be a date in the future that matches the time
-      nextFireDate = nextFireDate.plusDays(1);
-    }
-    if (notificationDetails.matchDateTimeComponents == DateTimeComponents.Time) {
-      return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(nextFireDate);
-    } else if (notificationDetails.matchDateTimeComponents == DateTimeComponents.DayOfWeekAndTime) {
-      while (nextFireDate.getDayOfWeek() != scheduledDateTime.getDayOfWeek()) {
-        nextFireDate = nextFireDate.plusDays(1);
-      }
-      return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(nextFireDate);
-    } else if (notificationDetails.matchDateTimeComponents
-        == DateTimeComponents.DayOfMonthAndTime) {
-      while (nextFireDate.getDayOfMonth() != scheduledDateTime.getDayOfMonth()) {
-        nextFireDate = nextFireDate.plusDays(1);
-      }
-      return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(nextFireDate);
-    } else if (notificationDetails.matchDateTimeComponents == DateTimeComponents.DateAndTime) {
-      while (nextFireDate.getMonthValue() != scheduledDateTime.getMonthValue()
-          || nextFireDate.getDayOfMonth() != scheduledDateTime.getDayOfMonth()) {
-        nextFireDate = nextFireDate.plusDays(1);
-      }
-      return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(nextFireDate);
-    }
-    return null;
-  }
-
+  // Get the Next Valid Reminder time based on end date, start date, selected days of the week, and notification times.
   private static String getNextFireDateMatchingTime(NotificationDetails notificationDetails) {
     // Set up timezone
     ZoneId zoneId = ZoneId.of(notificationDetails.timeZoneName);
@@ -1770,10 +1727,8 @@ public class FlutterLocalNotificationsPlugin
     if (notificationDetails != null) {
       if (notificationDetails.matchDateTimeComponents != null) {
         notificationDetails.scheduledDateTime =
-            getNextFireDateMatchingDateTimeComponents(notificationDetails);
+            getNextFireDateMatchingTime(notificationDetails);
             Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
-            Log.d(TAG, "Schedule Date Time 1: " + notificationDetails.scheduledDateTime.toString());
-            Log.d(TAG, "Schedule Date Time 2: " + getNextFireDateMatchingTime(notificationDetails).toString());
       }
       try {
         zonedScheduleNotification(applicationContext, notificationDetails, true);
