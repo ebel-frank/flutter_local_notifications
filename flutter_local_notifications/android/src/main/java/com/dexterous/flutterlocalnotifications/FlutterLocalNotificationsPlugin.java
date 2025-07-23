@@ -254,10 +254,13 @@ public class FlutterLocalNotificationsPlugin
   }
 
   static void scheduleNextNotification(Context context, NotificationDetails notificationDetails) {
+    Log.d(TAG, "scheduleNextNotification");
     try {
       if (notificationDetails.scheduledNotificationRepeatFrequency != null) {
+        Log.d(TAG, "zonedScheduleNextNotification");
         zonedScheduleNextNotification(context, notificationDetails);
       } else if (notificationDetails.matchDateTimeComponents != null) {
+        Log.d(TAG, "zonedScheduleNextNotificationMatchingDateComponents");
         zonedScheduleNextNotificationMatchingDateComponents(context, notificationDetails);
       } else if (notificationDetails.repeatInterval != null
           || notificationDetails.repeatIntervalMilliseconds != null) {
