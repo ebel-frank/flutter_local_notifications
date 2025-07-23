@@ -598,6 +598,7 @@ public class FlutterLocalNotificationsPlugin
       Boolean updateScheduledNotificationsCache) {
     Gson gson = buildGson();
     String notificationDetailsJson = gson.toJson(notificationDetails);
+    Log.d(TAG, "Notif Details: "+notificationDetailsJson);
     Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
     notificationIntent.putExtra(NOTIFICATION_DETAILS, notificationDetailsJson);
     PendingIntent pendingIntent =
@@ -1770,6 +1771,7 @@ public class FlutterLocalNotificationsPlugin
       if (notificationDetails.matchDateTimeComponents != null) {
         notificationDetails.scheduledDateTime =
             getNextFireDateMatchingDateTimeComponents(notificationDetails);
+            Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
             Log.d(TAG, "Schedule Date Time 1: " + notificationDetails.scheduledDateTime.toString());
             Log.d(TAG, "Schedule Date Time 2: " + getNextFireDateMatchingTime(notificationDetails).toString());
       }
