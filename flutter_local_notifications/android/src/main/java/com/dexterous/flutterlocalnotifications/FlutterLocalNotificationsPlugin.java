@@ -1711,6 +1711,7 @@ public class FlutterLocalNotificationsPlugin
       if (notificationDetails.matchDateTimeComponents != null) {
         notificationDetails.scheduledDateTime =
             getNextFireDateMatchingDateTimeComponents(notificationDetails);
+            Log.d(TAG, "Schedule Date Time: " + notificationDetails.scheduledDateTime.toString());
       }
       try {
         zonedScheduleNotification(applicationContext, notificationDetails, true);
