@@ -218,8 +218,8 @@ public class NotificationDetails implements Serializable {
     notificationDetails.body = (String) arguments.get(BODY);
     notificationDetails.scheduledDateTime = (String) arguments.get(SCHEDULED_DATE_TIME);
     notificationDetails.scheduledEndDateTime = (String) arguments.get(SCHEDULED_END_DATE_TIME);
-    notificationDetails.daysOfTheWeek =  (List<Integer>) arguments.get(DAYS_OF_THE_WEEK);
-    notificationDetails.notificationTimes =  (List<String>) arguments.get(NOTIFICATION_TIMES);
+    notificationDetails.daysOfTheWeek = (List<Integer>) arguments.get(DAYS_OF_THE_WEEK);
+    notificationDetails.notificationTimes = (List<String>) arguments.get(NOTIFICATION_TIMES);
     notificationDetails.timeZoneName = (String) arguments.get(TIME_ZONE_NAME);
     if (arguments.containsKey(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)) {
       notificationDetails.scheduledNotificationRepeatFrequency =
