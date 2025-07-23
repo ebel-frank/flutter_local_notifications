@@ -339,8 +339,8 @@ class FlutterLocalNotificationsPlugin {
     NotificationDetails notificationDetails, {
     required AndroidScheduleMode androidScheduleMode,
     TZDateTime? scheduledEndDate,
-    List<int> daysOfTheWeek,
-    List<String> notificationTimes,
+    required List<int> daysOfTheWeek,
+    required List<String> notificationTimes,
     String? payload,
     DateTimeComponents? matchDateTimeComponents,
   }) async {
