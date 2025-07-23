@@ -257,7 +257,6 @@ public class FlutterLocalNotificationsPlugin
     Log.d(TAG, "scheduleNextNotification");
     try {
       if (notificationDetails.scheduledNotificationRepeatFrequency != null) {
-        Log.d(TAG, "zonedScheduleNextNotification");
         zonedScheduleNextNotification(context, notificationDetails);
       } else if (notificationDetails.matchDateTimeComponents != null) {
         Log.d(TAG, "zonedScheduleNextNotificationMatchingDateComponents");
@@ -1376,6 +1375,7 @@ public class FlutterLocalNotificationsPlugin
   private static void zonedScheduleNextNotificationMatchingDateComponents(
       Context context, NotificationDetails notificationDetails) {
     String nextFireDate = getNextFireDateMatchingDateTimeComponents(notificationDetails);
+    Log.d(TAG, "Schedule Date Time: " + nextFireDate);
     if (nextFireDate == null) {
       return;
     }
