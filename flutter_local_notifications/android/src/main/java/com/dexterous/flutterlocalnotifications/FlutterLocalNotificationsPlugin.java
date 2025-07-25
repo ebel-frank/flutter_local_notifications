@@ -1313,12 +1313,16 @@ public class FlutterLocalNotificationsPlugin
 
     // Wake up device
     try {
+        String tag = "Alarm:WakeLock";
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && Build.MANUFACTURER.equals("Huawei")) {
+            tag = "LocationManagerService";
+        }
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (powerManager != null && !powerManager.isInteractive()) {
             // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
             PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
                 PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                "Alarm:WakeLock"
+                tag
             );
             wakeLock.acquire(8000); // Hold for 10 seconds
             Log.d(TAG, "Acquired partial wake lock for 8 seconds");
@@ -1378,7 +1382,6 @@ public class FlutterLocalNotificationsPlugin
   private static void zonedScheduleNextNotificationMatchingDateComponents(
       Context context, NotificationDetails notificationDetails) {
     String nextFireDate = getNextFireDateMatchingTime(notificationDetails);
-    Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
     if (nextFireDate == null) {
       // Remove the notification if there is no nextFireDate
       removeNotificationFromCache(context, notificationDetails.id);
