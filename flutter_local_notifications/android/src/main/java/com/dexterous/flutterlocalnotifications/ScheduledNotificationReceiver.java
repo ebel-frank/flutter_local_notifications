@@ -1,9 +1,11 @@
 package com.dexterous.flutterlocalnotifications;
 
 import android.app.Notification;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.Keep;
@@ -54,12 +56,27 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         FlutterLocalNotificationsPlugin.removeNotificationFromCache(context, notificationId);
       }
     } else {
+      Intent serviceIntent = new Intent(context, ForegroundService.class);
+
       Gson gson = FlutterLocalNotificationsPlugin.buildGson();
       Type type = new TypeToken<NotificationDetails>() {}.getType();
       NotificationDetails notificationDetails = gson.fromJson(notificationDetailsJson, type);
 
-      FlutterLocalNotificationsPlugin.showNotification(context, notificationDetails);
-      FlutterLocalNotificationsPlugin.scheduleNextNotification(context, notificationDetails);
+      serviceIntent.putExtra(FlutterLocalNotificationsPlugin.NOTIFICATION_DETAILS, notificationDetailsJson);
+
+      ForegroundServiceStartParameter parameter = new ForegroundServiceStartParameter(
+              notificationDetails,
+              Service.START_NOT_STICKY,
+              null
+      );
+
+      serviceIntent.putExtra(ForegroundServiceStartParameter.EXTRA, parameter);
+
+      if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        context.startForegroundService(serviceIntent);
+      } else {
+        context.startService(serviceIntent);
+      }
     }
   }
 }
