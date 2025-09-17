@@ -581,6 +581,8 @@ public class FlutterLocalNotificationsPlugin
         getBroadcastPendingIntent(context, notificationDetails.id, notificationIntent);
 
     AlarmManager alarmManager = getAlarmManager(context);
+    requestScheduleExactAlarmsPermission(context, alarmManager);
+
     setupAlarm(
         notificationDetails,
         alarmManager,
@@ -611,6 +613,8 @@ public class FlutterLocalNotificationsPlugin
             .toInstant()
             .toEpochMilli();
 
+
+    requestScheduleExactAlarmsPermission(context, alarmManager);
     setupAlarm(notificationDetails, alarmManager, epochMilli, pendingIntent);
 
     if (updateScheduledNotificationsCache) {
@@ -781,6 +785,14 @@ public class FlutterLocalNotificationsPlugin
   private static void checkCanScheduleExactAlarms(AlarmManager alarmManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
       throw new ExactAlarmPermissionException();
+    }
+  }
+
+  private static void requestScheduleExactAlarmsPermission(Context context, AlarmManager alarmManager) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+      Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+      intent.setData(Uri.parse("package:" + context.getPackageName()));
+      context.startActivity(intent);
     }
   }
 
@@ -1773,17 +1785,21 @@ public class FlutterLocalNotificationsPlugin
   private void zonedSchedule(MethodCall call, Result result) {
     NotificationDetails notificationDetails = extractNotificationDetails(result, call.arguments());
     if (notificationDetails != null) {
-      if (notificationDetails.matchDateTimeComponents != null) {
-        notificationDetails.scheduledDateTime =
-            getNextFireDateMatchingTime(notificationDetails);
-            Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
-      }
+//      if (notificationDetails.matchDateTimeComponents != null) {
+//        notificationDetails.scheduledDateTime =
+//            getNextFireDateMatchingTime(notificationDetails);
+//            Log.d(TAG, notificationDetails.notificationTimes + " " + notificationDetails.scheduledDateTime + " " + notificationDetails.scheduledEndDateTime + " " + notificationDetails.daysOfTheWeek.toString());
+//      } else {
+//          result.error("888","No match date time components",null);
+//      }
       try {
         zonedScheduleNotification(applicationContext, notificationDetails, true);
         result.success(null);
       } catch (PluginException e) {
         result.error(e.code, e.getMessage(), null);
       }
+    } else {
+        result.error("777", "Invalid icon, big picture resource, raw sound resource, or details", null);
     }
   }
 
