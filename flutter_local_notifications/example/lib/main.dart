@@ -442,6 +442,13 @@ class _HomePageState extends State<HomePage> {
                       await _cancelAllNotifications();
                     },
                   ),
+                  if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
+                    PaddedElevatedButton(
+                      buttonText: 'Cancel all pending notifications',
+                      onPressed: () async {
+                        await _cancelAllPendingNotifications();
+                      },
+                    ),
                   if (!Platform.isWindows) ...repeating.examples(context),
                   const Divider(),
                   const Text(
@@ -1074,6 +1081,8 @@ class _HomePageState extends State<HomePage> {
           // user tapped on a action (this mimics the behavior on iOS).
           cancelNotification: false,
         ),
+        AndroidNotificationAction('read', 'Mark as read',
+            semanticAction: SemanticAction.markAsRead, invisible: true),
       ],
     );
 
@@ -1153,6 +1162,7 @@ class _HomePageState extends State<HomePage> {
               label: 'Enter a message',
             ),
           ],
+          semanticAction: SemanticAction.reply,
         ),
       ],
     );
@@ -1889,6 +1899,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  Future<void> _cancelAllPendingNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAllPendingNotifications();
   }
 
   Future<void> _showOngoingNotification() async {
@@ -2628,7 +2642,9 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Text('text: ${msg.text}\n'
                         'timestamp: ${msg.timestamp}\n'
-                        'person: ${_formatPerson(msg.person)}'),
+                        'person: ${_formatPerson(msg.person)}\n'
+                        'dataMimeType: ${msg.dataMimeType}\n'
+                        'dataUri: ${msg.dataUri}'),
                     const Divider(color: Colors.black),
                   ],
                 ),
