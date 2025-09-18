@@ -43,16 +43,16 @@ public class ForegroundService extends Service {
     } else {
       startForeground(parameter.notificationData.id, notification);
     }
-
-    try {
-      FlutterLocalNotificationsPlugin.showNotification(this, parameter.notificationData);
-      FlutterLocalNotificationsPlugin.scheduleNextNotification(this, parameter.notificationData);
-    } catch (Exception e) {
-      Log.e("ForegroundService", "Error handling notification", e);
-    } finally {
-      stopSelf(startId);
-    }
-
+    new Thread(() -> {
+      try {
+        FlutterLocalNotificationsPlugin.showNotification(this, parameter.notificationData);
+        FlutterLocalNotificationsPlugin.scheduleNextNotification(this, parameter.notificationData);
+      } catch (Exception e) {
+        Log.e("ForegroundService", "Error handling notification", e);
+      } finally {
+        stopSelf(startId);
+      }
+    }).start();
     return parameter.startMode;
   }
 
