@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -26,12 +25,6 @@ public class ForegroundService extends Service {
               intent.getSerializableExtra(ForegroundServiceStartParameter.EXTRA);
     }
 
-    if (parameter == null) {
-      Log.e("ForegroundService", "No parameter found, stopping service");
-      stopSelf(startId);
-      return START_NOT_STICKY;
-    }
-
     Notification notification =
         FlutterLocalNotificationsPlugin.createNotification(this, parameter.notificationData);
     if (parameter.foregroundServiceTypes != null
@@ -43,16 +36,6 @@ public class ForegroundService extends Service {
     } else {
       startForeground(parameter.notificationData.id, notification);
     }
-    new Thread(() -> {
-      try {
-        FlutterLocalNotificationsPlugin.showNotification(this, parameter.notificationData);
-        FlutterLocalNotificationsPlugin.scheduleNextNotification(this, parameter.notificationData);
-      } catch (Exception e) {
-        Log.e("ForegroundService", "Error handling notification", e);
-      } finally {
-        stopSelf(startId);
-      }
-    }).start();
     return parameter.startMode;
   }
 

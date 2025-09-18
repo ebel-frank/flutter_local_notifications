@@ -592,6 +592,8 @@ public class FlutterLocalNotificationsPlugin
         getBroadcastPendingIntent(context, notificationDetails.id, notificationIntent);
 
     AlarmManager alarmManager = getAlarmManager(context);
+    requestScheduleExactAlarmsPermission(context, alarmManager);
+
     setupAlarm(
         notificationDetails,
         alarmManager,
@@ -622,6 +624,8 @@ public class FlutterLocalNotificationsPlugin
             .toInstant()
             .toEpochMilli();
 
+
+    requestScheduleExactAlarmsPermission(context, alarmManager);
     setupAlarm(notificationDetails, alarmManager, epochMilli, pendingIntent);
 
     if (updateScheduledNotificationsCache) {
@@ -792,6 +796,14 @@ public class FlutterLocalNotificationsPlugin
   private static void checkCanScheduleExactAlarms(AlarmManager alarmManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
       throw new ExactAlarmPermissionException();
+    }
+  }
+
+  private static void requestScheduleExactAlarmsPermission(Context context, AlarmManager alarmManager) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+      Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+      intent.setData(Uri.parse("package:" + context.getPackageName()));
+      context.startActivity(intent);
     }
   }
 
