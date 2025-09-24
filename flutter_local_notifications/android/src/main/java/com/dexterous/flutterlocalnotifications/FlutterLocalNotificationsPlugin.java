@@ -1332,11 +1332,11 @@ public class FlutterLocalNotificationsPlugin
         if (powerManager != null && !powerManager.isInteractive()) {
             // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
             PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-                PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
+                PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 tag
             );
-            wakeLock.acquire(10000); // Hold for 10 seconds
-            Log.d(TAG, "Acquired partial wake lock for 10 seconds");
+            wakeLock.acquire(8000); // Hold for 10 seconds
+            Log.d(TAG, "Acquired partial wake lock for 8 seconds");
         } else if (powerManager == null) {
             Log.e(TAG, "PowerManager is null");
         } else {
