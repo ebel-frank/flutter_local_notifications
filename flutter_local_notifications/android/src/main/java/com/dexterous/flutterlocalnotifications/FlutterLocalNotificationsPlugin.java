@@ -14,6 +14,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager;
+import android.app.KeyguardManager;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
@@ -23,10 +25,17 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.widget.Toast;
 import android.os.Handler;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import android.os.Looper;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -55,6 +64,7 @@ import androidx.core.graphics.drawable.IconCompat;
 
 import com.dexterous.flutterlocalnotifications.isolate.IsolatePreferences;
 import com.dexterous.flutterlocalnotifications.models.BitmapSource;
+import com.dexterous.flutterlocalnotifications.models.DateTimeComponents;
 import com.dexterous.flutterlocalnotifications.models.IconSource;
 import com.dexterous.flutterlocalnotifications.models.MessageDetails;
 import com.dexterous.flutterlocalnotifications.models.NotificationAction;
@@ -1312,6 +1322,30 @@ public class FlutterLocalNotificationsPlugin
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
+    // Wake up device
+    try {
+        String tag = "Alarm:WakeLock";
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && Build.MANUFACTURER.equals("Huawei")) {
+            tag = "LocationManagerService";
+        }
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null && !powerManager.isInteractive()) {
+            // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
+                tag
+            );
+            wakeLock.acquire(10000); // Hold for 10 seconds
+            Log.d(TAG, "Acquired partial wake lock for 10 seconds");
+        } else if (powerManager == null) {
+            Log.e(TAG, "PowerManager is null");
+        } else {
+            Log.d(TAG, "Screen is already interactive");
+        }
+    } catch (Exception e) {
+        Log.e(TAG, "Error acquiring wake lock: " + e.getMessage());
+    }
+
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
           notificationDetails.tag, notificationDetails.id, notification);
@@ -1323,6 +1357,7 @@ public class FlutterLocalNotificationsPlugin
       // Listen for timeout with a Handler
       notificationHandler = new Handler(Looper.getMainLooper());
       notificationHandler.postDelayed(() -> {
+
           final Map<String, Object> responseMap = new HashMap<>();
           responseMap.put(NOTIFICATION_ID, notificationDetails.id);
           responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
