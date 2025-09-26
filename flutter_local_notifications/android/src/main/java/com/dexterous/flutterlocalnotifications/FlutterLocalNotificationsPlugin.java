@@ -272,6 +272,7 @@ public class FlutterLocalNotificationsPlugin
       } else {
         removeNotificationFromCache(context, notificationDetails.id);
       }
+      Log.d("From Andy", "Next Notification Scheduled Successfully!");
     } catch (ExactAlarmPermissionException e) {
       Log.e(TAG, e.getMessage());
       removeNotificationFromCache(context, notificationDetails.id);
@@ -1322,30 +1323,6 @@ public class FlutterLocalNotificationsPlugin
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
-    // Wake up device
-    try {
-        String tag = "Alarm:WakeLock";
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && Build.MANUFACTURER.equals("Huawei")) {
-            tag = "LocationManagerService";
-        }
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isInteractive()) {
-            // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                tag
-            );
-            wakeLock.acquire(8000); // Hold for 10 seconds
-            Log.d(TAG, "Acquired partial wake lock for 8 seconds");
-        } else if (powerManager == null) {
-            Log.e(TAG, "PowerManager is null");
-        } else {
-            Log.d(TAG, "Screen is already interactive");
-        }
-    } catch (Exception e) {
-        Log.e(TAG, "Error acquiring wake lock: " + e.getMessage());
-    }
-
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
           notificationDetails.tag, notificationDetails.id, notification);
@@ -1371,6 +1348,8 @@ public class FlutterLocalNotificationsPlugin
           ActionBroadcastReceiver.addEvent(responseMap, context);
       }, notificationDetails.timeoutAfter);
     }
+
+    Log.d("From Andy", "Notification Shown Successfully!");
   }
 
   public static void cancelNotificationHandler() {
@@ -1795,6 +1774,7 @@ public class FlutterLocalNotificationsPlugin
       }
       try {
         zonedScheduleNotification(applicationContext, notificationDetails, true);
+        Log.d("From Andy", "Alarm Scheduled Successfully!");
         result.success(null);
       } catch (PluginException e) {
         result.error(e.code, e.getMessage(), null);

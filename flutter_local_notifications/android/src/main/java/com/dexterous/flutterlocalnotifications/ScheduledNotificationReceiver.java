@@ -58,6 +58,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
       Type type = new TypeToken<NotificationDetails>() {}.getType();
       NotificationDetails notificationDetails = gson.fromJson(notificationDetailsJson, type);
 
+      Log.d("From Andy","Alarm Broadcast Fired!");
       FlutterLocalNotificationsPlugin.showNotification(context, notificationDetails);
       FlutterLocalNotificationsPlugin.scheduleNextNotification(context, notificationDetails);
     }
