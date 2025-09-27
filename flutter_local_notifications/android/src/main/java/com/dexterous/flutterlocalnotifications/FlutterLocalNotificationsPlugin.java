@@ -1330,6 +1330,22 @@ public class FlutterLocalNotificationsPlugin
       notificationManagerCompat.notify(notificationDetails.id, notification);
     }
 
+    // Tell Flutter to navigate to the Alarm screen immediately
+    // This should be moved to a separate function in the future
+    final Map<String, Object> alarmScreenMap = new HashMap<>();
+    alarmScreenMap.put(NOTIFICATION_ID, notificationDetails.id);
+    alarmScreenMap.put(ACTION_ID, "navigate_to_alarm_screen");
+    alarmScreenMap.put(
+            FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
+
+    // Foreground response action
+    alarmScreenMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+
+    // Send the event
+    ActionBroadcastReceiver.addEvent(alarmScreenMap, context);
+
+    // If notification timeout with no action, tell Flutter to notify admin
+    // This should be moved to a separate function in the future
     if (notificationDetails.timeoutAfter != null) {
       // Listen for timeout with a Handler
       notificationHandler = new Handler(Looper.getMainLooper());
@@ -1344,7 +1360,7 @@ public class FlutterLocalNotificationsPlugin
           // Foreground response action
           responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
 
-          // Send a notification to the Patient and the Doctor
+          // Send the event
           ActionBroadcastReceiver.addEvent(responseMap, context);
       }, notificationDetails.timeoutAfter);
     }
