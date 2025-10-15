@@ -1336,6 +1336,10 @@ public class FlutterLocalNotificationsPlugin
 
         // Send the event
         ActionBroadcastReceiver.addEvent(responseMap, context);
+
+        // Stop service
+        Intent serviceIntent = new Intent(context, ForegroundService.class);
+        context.stopService(serviceIntent);
       }, notificationDetails.timeoutAfter);
     }
   }
