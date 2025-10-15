@@ -36,6 +36,10 @@ public class ForegroundService extends Service {
     } else {
       startForeground(parameter.notificationData.id, notification);
     }
+
+    FlutterLocalNotificationsPlugin.scheduleNextNotification(this, parameter.notificationData);
+    FlutterLocalNotificationsPlugin.notifyAdminOnTimeout(this, parameter.notificationData);
+
     return parameter.startMode;
   }
 

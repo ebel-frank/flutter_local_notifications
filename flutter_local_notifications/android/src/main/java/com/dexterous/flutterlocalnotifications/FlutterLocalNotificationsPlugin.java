@@ -1317,6 +1317,28 @@ public class FlutterLocalNotificationsPlugin
   private static Handler notificationHandler;
   private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+  /// ** TMR Golden Living **
+  /// If notification timeout with no action, tell Flutter to notify admin
+  static void notifyAdminOnTimeout(Context context, NotificationDetails notificationDetails){
+    if (notificationDetails.timeoutAfter != null) {
+      // Listen for timeout with a Handler
+      notificationHandler = new Handler(Looper.getMainLooper());
+      notificationHandler.postDelayed(() -> {
+
+        final Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put(NOTIFICATION_ID, notificationDetails.id);
+        responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
+        responseMap.put(
+                FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
+
+        // Foreground response action
+        responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+
+        // Send the event
+        ActionBroadcastReceiver.addEvent(responseMap, context);
+      }, notificationDetails.timeoutAfter);
+    }
+  }
 
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
@@ -1329,43 +1351,6 @@ public class FlutterLocalNotificationsPlugin
     } else {
       notificationManagerCompat.notify(notificationDetails.id, notification);
     }
-
-    // Tell Flutter to navigate to the Alarm screen immediately
-    // This should be moved to a separate function in the future
-    final Map<String, Object> alarmScreenMap = new HashMap<>();
-    alarmScreenMap.put(NOTIFICATION_ID, notificationDetails.id);
-    alarmScreenMap.put(ACTION_ID, "navigate_to_alarm_screen");
-    alarmScreenMap.put(
-            FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
-
-    // Foreground response action
-    alarmScreenMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
-
-    // Send the event
-    ActionBroadcastReceiver.addEvent(alarmScreenMap, context);
-
-    // If notification timeout with no action, tell Flutter to notify admin
-    // This should be moved to a separate function in the future
-    if (notificationDetails.timeoutAfter != null) {
-      // Listen for timeout with a Handler
-      notificationHandler = new Handler(Looper.getMainLooper());
-      notificationHandler.postDelayed(() -> {
-
-          final Map<String, Object> responseMap = new HashMap<>();
-          responseMap.put(NOTIFICATION_ID, notificationDetails.id);
-          responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
-          responseMap.put(
-              FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
-
-          // Foreground response action
-          responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
-
-          // Send the event
-          ActionBroadcastReceiver.addEvent(responseMap, context);
-      }, notificationDetails.timeoutAfter);
-    }
-
-    Log.d("From Andy", "Notification Shown Successfully!");
   }
 
   public static void cancelNotificationHandler() {
