@@ -611,10 +611,17 @@ public class FlutterLocalNotificationsPlugin
     Gson gson = buildGson();
     String notificationDetailsJson = gson.toJson(notificationDetails);
     Log.d(TAG, "Notif Details: "+notificationDetailsJson);
-    Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
-    notificationIntent.putExtra(NOTIFICATION_DETAILS, notificationDetailsJson);
+    Intent notificationIntent = new Intent(context, ForegroundService.class);
+      notificationIntent.putExtra(
+              ForegroundServiceStartParameter.EXTRA,
+              new ForegroundServiceStartParameter(
+                      null,
+                      notificationDetailsJson,
+                      ForegroundService.START_STICKY_COMPATIBILITY,
+                      null)
+      );
     PendingIntent pendingIntent =
-        getBroadcastPendingIntent(context, notificationDetails.id, notificationIntent);
+        getServicePendingIntent(context, notificationDetails.id, notificationIntent);
     AlarmManager alarmManager = getAlarmManager(context);
     long epochMilli =
         ZonedDateTime.of(
@@ -688,6 +695,19 @@ public class FlutterLocalNotificationsPlugin
       flags |= PendingIntent.FLAG_IMMUTABLE;
     }
     return PendingIntent.getBroadcast(context, id, intent, flags);
+  }
+
+  private static PendingIntent getServicePendingIntent(Context context, int id, Intent intent){
+      int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+      if (VERSION.SDK_INT >= VERSION_CODES.M) {
+          flags |= PendingIntent.FLAG_IMMUTABLE;
+      }
+
+      if (VERSION.SDK_INT >= VERSION_CODES.O) {
+          return PendingIntent.getForegroundService(context, id, intent, flags);
+      } else{
+          return PendingIntent.getService(context, id, intent, flags);
+      }
   }
 
   private static void repeatNotification(
