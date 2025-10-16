@@ -2419,7 +2419,7 @@ public class FlutterLocalNotificationsPlugin
           if (notificationDetails.id != 0) {
             ForegroundServiceStartParameter parameter =
                 new ForegroundServiceStartParameter(
-                    notificationDetails, startType, foregroundServiceTypes);
+                    notificationDetails, null, startType, foregroundServiceTypes);
             Intent intent = new Intent(applicationContext, ForegroundService.class);
             intent.putExtra(ForegroundServiceStartParameter.EXTRA, parameter);
             ContextCompat.startForegroundService(applicationContext, intent);

@@ -25,16 +25,13 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     String notificationDetailsJson =
             intent.getStringExtra(FlutterLocalNotificationsPlugin.NOTIFICATION_DETAILS);
 
-    Gson gson = FlutterLocalNotificationsPlugin.buildGson();
-    Type type = new TypeToken<NotificationDetails>() {}.getType();
-    NotificationDetails notificationDetails = gson.fromJson(notificationDetailsJson, type);
-
     Intent serviceIntent = new Intent(context, ForegroundService.class);
 
     serviceIntent.putExtra(
             ForegroundServiceStartParameter.EXTRA,
             new ForegroundServiceStartParameter(
-                    notificationDetails,
+                    null,
+                    notificationDetailsJson,
                     ForegroundService.START_STICKY_COMPATIBILITY,
                     null)
     );
