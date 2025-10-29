@@ -65,7 +65,9 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     FlutterLocalNotificationsPlugin.cancelNotificationHandler();
 
     addEvent(action, context);
-    
+
+    Intent serviceIntent = new Intent(context, ForegroundService.class);
+    context.stopService(serviceIntent);
   }
 
   public static void addEvent(Map<String, Object> action, Context context) {

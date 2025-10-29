@@ -272,6 +272,7 @@ public class FlutterLocalNotificationsPlugin
       } else {
         removeNotificationFromCache(context, notificationDetails.id);
       }
+      Log.d("From Andy", "Next Notification Scheduled Successfully!");
     } catch (ExactAlarmPermissionException e) {
       Log.e(TAG, e.getMessage());
       removeNotificationFromCache(context, notificationDetails.id);
@@ -610,10 +611,17 @@ public class FlutterLocalNotificationsPlugin
     Gson gson = buildGson();
     String notificationDetailsJson = gson.toJson(notificationDetails);
     Log.d(TAG, "Notif Details: "+notificationDetailsJson);
-    Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
-    notificationIntent.putExtra(NOTIFICATION_DETAILS, notificationDetailsJson);
+    Intent notificationIntent = new Intent(context, ForegroundService.class);
+      notificationIntent.putExtra(
+              ForegroundServiceStartParameter.EXTRA,
+              new ForegroundServiceStartParameter(
+                      null,
+                      notificationDetailsJson,
+                      ForegroundService.START_STICKY_COMPATIBILITY,
+                      null)
+      );
     PendingIntent pendingIntent =
-        getBroadcastPendingIntent(context, notificationDetails.id, notificationIntent);
+        getServicePendingIntent(context, notificationDetails.id, notificationIntent);
     AlarmManager alarmManager = getAlarmManager(context);
     long epochMilli =
         ZonedDateTime.of(
@@ -687,6 +695,19 @@ public class FlutterLocalNotificationsPlugin
       flags |= PendingIntent.FLAG_IMMUTABLE;
     }
     return PendingIntent.getBroadcast(context, id, intent, flags);
+  }
+
+  private static PendingIntent getServicePendingIntent(Context context, int id, Intent intent){
+      int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+      if (VERSION.SDK_INT >= VERSION_CODES.M) {
+          flags |= PendingIntent.FLAG_IMMUTABLE;
+      }
+
+      if (VERSION.SDK_INT >= VERSION_CODES.O) {
+          return PendingIntent.getForegroundService(context, id, intent, flags);
+      } else{
+          return PendingIntent.getService(context, id, intent, flags);
+      }
   }
 
   private static void repeatNotification(
@@ -1316,60 +1337,43 @@ public class FlutterLocalNotificationsPlugin
   private static Handler notificationHandler;
   private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+  /// ** TMR Golden Living **
+  /// If notification timeout with no action, tell Flutter to notify admin
+  static void notifyAdminOnTimeout(Context context, NotificationDetails notificationDetails){
+    if (notificationDetails.timeoutAfter != null) {
+      // Listen for timeout with a Handler
+      notificationHandler = new Handler(Looper.getMainLooper());
+      notificationHandler.postDelayed(() -> {
+
+        final Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put(NOTIFICATION_ID, notificationDetails.id);
+        responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
+        responseMap.put(
+                FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
+
+        // Foreground response action
+        responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
+
+        // Send the event
+        ActionBroadcastReceiver.addEvent(responseMap, context);
+
+        // Stop service
+        Intent serviceIntent = new Intent(context, ForegroundService.class);
+        context.stopService(serviceIntent);
+      }, notificationDetails.timeoutAfter);
+    }
+  }
 
   static void showNotification(Context context, NotificationDetails notificationDetails) {
     Notification notification = createNotification(context, notificationDetails);
     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
     notification.flags |= Notification.FLAG_INSISTENT; // Ensure sound is looping
 
-    // Wake up device
-    try {
-        String tag = "Alarm:WakeLock";
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && Build.MANUFACTURER.equals("Huawei")) {
-            tag = "LocationManagerService";
-        }
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isInteractive()) {
-            // Use PARTIAL_WAKE_LOCK to ensure CPU is awake
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                tag
-            );
-            wakeLock.acquire(8000); // Hold for 10 seconds
-            Log.d(TAG, "Acquired partial wake lock for 8 seconds");
-        } else if (powerManager == null) {
-            Log.e(TAG, "PowerManager is null");
-        } else {
-            Log.d(TAG, "Screen is already interactive");
-        }
-    } catch (Exception e) {
-        Log.e(TAG, "Error acquiring wake lock: " + e.getMessage());
-    }
-
     if (notificationDetails.tag != null) {
       notificationManagerCompat.notify(
           notificationDetails.tag, notificationDetails.id, notification);
     } else {
       notificationManagerCompat.notify(notificationDetails.id, notification);
-    }
-
-    if (notificationDetails.timeoutAfter != null) {
-      // Listen for timeout with a Handler
-      notificationHandler = new Handler(Looper.getMainLooper());
-      notificationHandler.postDelayed(() -> {
-
-          final Map<String, Object> responseMap = new HashMap<>();
-          responseMap.put(NOTIFICATION_ID, notificationDetails.id);
-          responseMap.put(ACTION_ID, "report_to_doctor_admin_patient_action");
-          responseMap.put(
-              FlutterLocalNotificationsPlugin.PAYLOAD, notificationDetails.payload);
-
-          // Foreground response action
-          responseMap.put(NOTIFICATION_RESPONSE_TYPE, 1);
-
-          // Send a notification to the Patient and the Doctor
-          ActionBroadcastReceiver.addEvent(responseMap, context);
-      }, notificationDetails.timeoutAfter);
     }
   }
 
@@ -1795,6 +1799,7 @@ public class FlutterLocalNotificationsPlugin
       }
       try {
         zonedScheduleNotification(applicationContext, notificationDetails, true);
+        Log.d("From Andy", "Alarm Scheduled Successfully!");
         result.success(null);
       } catch (PluginException e) {
         result.error(e.code, e.getMessage(), null);
@@ -2434,7 +2439,7 @@ public class FlutterLocalNotificationsPlugin
           if (notificationDetails.id != 0) {
             ForegroundServiceStartParameter parameter =
                 new ForegroundServiceStartParameter(
-                    notificationDetails, startType, foregroundServiceTypes);
+                    notificationDetails, null, startType, foregroundServiceTypes);
             Intent intent = new Intent(applicationContext, ForegroundService.class);
             intent.putExtra(ForegroundServiceStartParameter.EXTRA, parameter);
             ContextCompat.startForegroundService(applicationContext, intent);

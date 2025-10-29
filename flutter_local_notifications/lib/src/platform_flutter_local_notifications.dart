@@ -707,6 +707,7 @@ class IOSFlutterLocalNotificationsPlugin
     bool badge = false,
     bool provisional = false,
     bool critical = false,
+    bool providesAppNotificationSettings = false,
   }) =>
       _channel.invokeMethod<bool?>('requestPermissions', <String, bool>{
         'sound': sound,
@@ -714,6 +715,7 @@ class IOSFlutterLocalNotificationsPlugin
         'badge': badge,
         'provisional': provisional,
         'critical': critical,
+        'providesAppNotificationSettings': providesAppNotificationSettings,
       });
 
   /// Returns whether the app can post notifications and what kind of.
@@ -733,6 +735,8 @@ class IOSFlutterLocalNotificationsPlugin
             isSoundEnabled: dict['isSoundEnabled'] ?? false,
             isProvisionalEnabled: dict['isProvisionalEnabled'] ?? false,
             isCriticalEnabled: dict['isCriticalEnabled'] ?? false,
+            isProvidesAppNotificationSettingsEnabled:
+                dict['isProvidesAppNotificationSettingsEnabled'] ?? false,
           );
         },
       );
@@ -902,6 +906,7 @@ class MacOSFlutterLocalNotificationsPlugin
     bool badge = false,
     bool provisional = false,
     bool critical = false,
+    bool providesAppNotificationSettings = false,
   }) =>
       _channel.invokeMethod<bool>('requestPermissions', <String, bool?>{
         'sound': sound,
@@ -909,6 +914,7 @@ class MacOSFlutterLocalNotificationsPlugin
         'badge': badge,
         'provisional': provisional,
         'critical': critical,
+        'providesAppNotificationSettings': providesAppNotificationSettings,
       });
 
   /// Returns whether the app can post notifications and what kind of.
@@ -928,6 +934,8 @@ class MacOSFlutterLocalNotificationsPlugin
           isSoundEnabled: dict['isSoundEnabled'] ?? false,
           isProvisionalEnabled: dict['isProvisionalEnabled'] ?? false,
           isCriticalEnabled: dict['isCriticalEnabled'] ?? false,
+          isProvidesAppNotificationSettingsEnabled:
+              dict['isProvidesAppNotificationSettingsEnabled'] ?? false,
         );
       });
 
